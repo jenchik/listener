@@ -2,6 +2,7 @@
 Concurent Sub/Unsub pattern for Golang. Can be used as an alternative to channels
 
 [![Build Status](https://travis-ci.org/jenchik/listener.svg)](https://travis-ci.org/jenchik/listener)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jenchik/listener)](https://goreportcard.com/report/github.com/jenchik/listener)
 
 Installation
 ------------
