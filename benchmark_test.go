@@ -2,7 +2,6 @@ package listener
 
 import (
 	"math/rand"
-	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -81,7 +80,6 @@ func BenchmarkResend(b *testing.B) {
 	obs := NewListeners()
 	var found bool
 	var key string
-	var wg sync.WaitGroup
 
 	b.ReportAllocs()
 	b.SetBytes(2)
@@ -93,9 +91,7 @@ func BenchmarkResend(b *testing.B) {
 				continue
 			}
 
-			wg.Add(1)
 			go func(k string) {
-				defer wg.Done()
 				l, f := obs.GetOrCreate(k)
 				if !f {
 					time.AfterFunc(time.Millisecond, func() {
@@ -116,7 +112,6 @@ func BenchmarkOnce(b *testing.B) {
 	obs := NewListeners(NewListenerOnce)
 	var found bool
 	var key string
-	var wg sync.WaitGroup
 
 	b.ReportAllocs()
 	b.SetBytes(2)
@@ -128,9 +123,7 @@ func BenchmarkOnce(b *testing.B) {
 				continue
 			}
 
-			wg.Add(1)
 			go func(k string) {
-				defer wg.Done()
 				l, f := obs.GetOrCreate(k)
 				if !f {
 					time.AfterFunc(time.Millisecond, func() {
