@@ -30,9 +30,6 @@ func NewListener() Listener {
 }
 
 func newListener() *listener {
-	v := atomic.Value{}
-	v.Load()
-
 	return &listener{
 		cond: sync.Cond{L: locker{}},
 	}
