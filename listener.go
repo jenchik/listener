@@ -12,18 +12,11 @@ type (
 		trigger uint32
 		p       unsafe.Pointer
 	}
-
-	locker struct{}
 )
 
 var (
-	_ sync.Locker = &locker{}
-	_ Listener    = &listener{}
+	_ Listener = &listener{}
 )
-
-func (locker) Lock() {}
-
-func (locker) Unlock() {}
 
 func NewListener() Listener {
 	return newListener()
