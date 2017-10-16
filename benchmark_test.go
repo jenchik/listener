@@ -107,6 +107,71 @@ func BenchmarkResend(b *testing.B) {
 	}
 }
 
+func BenchmarkResendString(b *testing.B) {
+	m := initMap()
+	obs := NewStringListeners()
+	var found bool
+	var key string
+
+	b.ReportAllocs()
+	b.SetBytes(2)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		for _, key = range dispersion {
+			if _, found = m[key]; found {
+				continue
+			}
+
+			go func(k string) {
+				l, f := obs.GetOrCreate(k)
+				if !f {
+					time.AfterFunc(time.Millisecond, func() {
+						//obs.Delete(key)
+						l.Broadcast(312)
+					})
+				}
+				if l.Wait().(int) != 312 {
+					b.Fail()
+				}
+			}(key)
+		}
+	}
+}
+
+func BenchmarkResendInt(b *testing.B) {
+	m := initMap()
+	obs := NewIntListeners()
+	var found bool
+	var key string
+	var keyInt int
+
+	b.ReportAllocs()
+	b.SetBytes(2)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		for keyInt, key = range dispersion {
+			if _, found = m[key]; found {
+				continue
+			}
+
+			go func(k int) {
+				l, f := obs.GetOrCreate(k)
+				if !f {
+					time.AfterFunc(time.Millisecond, func() {
+						//obs.Delete(key)
+						l.Broadcast(312)
+					})
+				}
+				if l.Wait().(int) != 312 {
+					b.Fail()
+				}
+			}(keyInt)
+		}
+	}
+}
+
 func BenchmarkOnce(b *testing.B) {
 	m := initMap()
 	obs := NewListeners(NewListenerOnce)
@@ -135,6 +200,71 @@ func BenchmarkOnce(b *testing.B) {
 					b.Fail()
 				}
 			}(key)
+		}
+	}
+}
+
+func BenchmarkOnceString(b *testing.B) {
+	m := initMap()
+	obs := NewStringListeners(NewListenerOnce)
+	var found bool
+	var key string
+
+	b.ReportAllocs()
+	b.SetBytes(2)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		for _, key = range dispersion {
+			if _, found = m[key]; found {
+				continue
+			}
+
+			go func(k string) {
+				l, f := obs.GetOrCreate(k)
+				if !f {
+					time.AfterFunc(time.Millisecond, func() {
+						//obs.Delete(key)
+						l.Broadcast(312)
+					})
+				}
+				if l.Wait().(int) != 312 {
+					b.Fail()
+				}
+			}(key)
+		}
+	}
+}
+
+func BenchmarkOnceInt(b *testing.B) {
+	m := initMap()
+	obs := NewIntListeners(NewListenerOnce)
+	var found bool
+	var key string
+	var keyInt int
+
+	b.ReportAllocs()
+	b.SetBytes(2)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		for keyInt, key = range dispersion {
+			if _, found = m[key]; found {
+				continue
+			}
+
+			go func(k int) {
+				l, f := obs.GetOrCreate(k)
+				if !f {
+					time.AfterFunc(time.Millisecond, func() {
+						//obs.Delete(key)
+						l.Broadcast(312)
+					})
+				}
+				if l.Wait().(int) != 312 {
+					b.Fail()
+				}
+			}(keyInt)
 		}
 	}
 }
@@ -179,6 +309,88 @@ func BenchmarkThreadsResend(b *testing.B) {
 	})
 }
 
+func BenchmarkThreadsResendString(b *testing.B) {
+	var d uint32
+
+	m := initMap()
+	obs := NewStringListeners()
+
+	b.SetParallelism(benchWorks)
+	b.ReportAllocs()
+	b.SetBytes(2)
+	b.ResetTimer()
+
+	b.RunParallel(func(pb *testing.PB) {
+		dd := atomic.AddUint32(&d, 1)
+		disp := dispersions[int(dd)%benchWorks]
+		var found bool
+		var key string
+		var l Listener
+		var i int
+		for pb.Next() {
+			key = disp[i%steps]
+			if _, found = m[key]; found {
+				continue
+			}
+
+			l, found = obs.GetOrCreate(key)
+			if !found {
+				time.AfterFunc(time.Millisecond, func() {
+					//obs.Delete(key)
+					l.Broadcast(312)
+				})
+			}
+			if l.Wait().(int) != 312 {
+				b.Fail()
+			}
+
+			i++
+		}
+	})
+}
+
+func BenchmarkThreadsResendInt(b *testing.B) {
+	var d uint32
+
+	m := initMap()
+	obs := NewIntListeners()
+
+	b.SetParallelism(benchWorks)
+	b.ReportAllocs()
+	b.SetBytes(2)
+	b.ResetTimer()
+
+	b.RunParallel(func(pb *testing.PB) {
+		dd := atomic.AddUint32(&d, 1)
+		disp := dispersions[int(dd)%benchWorks]
+		var found bool
+		var key string
+		var keyInt int
+		var l Listener
+		var i int
+		for pb.Next() {
+			keyInt = i % steps
+			key = disp[keyInt]
+			if _, found = m[key]; found {
+				continue
+			}
+
+			l, found = obs.GetOrCreate(keyInt)
+			if !found {
+				time.AfterFunc(time.Millisecond, func() {
+					//obs.Delete(keyInt)
+					l.Broadcast(312)
+				})
+			}
+			if l.Wait().(int) != 312 {
+				b.Fail()
+			}
+
+			i++
+		}
+	})
+}
+
 func BenchmarkThreadsOnce(b *testing.B) {
 	var d uint32
 
@@ -207,6 +419,88 @@ func BenchmarkThreadsOnce(b *testing.B) {
 			if !found {
 				time.AfterFunc(time.Millisecond, func() {
 					//obs.Delete(key)
+					l.Broadcast(312)
+				})
+			}
+			if l.Wait().(int) != 312 {
+				b.Fail()
+			}
+
+			i++
+		}
+	})
+}
+
+func BenchmarkThreadsOnceString(b *testing.B) {
+	var d uint32
+
+	m := initMap()
+	obs := NewStringListeners(NewListenerOnce)
+
+	b.SetParallelism(benchWorks)
+	b.ReportAllocs()
+	b.SetBytes(2)
+	b.ResetTimer()
+
+	b.RunParallel(func(pb *testing.PB) {
+		dd := atomic.AddUint32(&d, 1)
+		disp := dispersions[int(dd)%benchWorks]
+		var found bool
+		var key string
+		var l Listener
+		var i int
+		for pb.Next() {
+			key = disp[i%steps]
+			if _, found = m[key]; found {
+				continue
+			}
+
+			l, found = obs.GetOrCreate(key)
+			if !found {
+				time.AfterFunc(time.Millisecond, func() {
+					//obs.Delete(key)
+					l.Broadcast(312)
+				})
+			}
+			if l.Wait().(int) != 312 {
+				b.Fail()
+			}
+
+			i++
+		}
+	})
+}
+
+func BenchmarkThreadsOnceInt(b *testing.B) {
+	var d uint32
+
+	m := initMap()
+	obs := NewIntListeners(NewListenerOnce)
+
+	b.SetParallelism(benchWorks)
+	b.ReportAllocs()
+	b.SetBytes(2)
+	b.ResetTimer()
+
+	b.RunParallel(func(pb *testing.PB) {
+		dd := atomic.AddUint32(&d, 1)
+		disp := dispersions[int(dd)%benchWorks]
+		var found bool
+		var key string
+		var keyInt int
+		var l Listener
+		var i int
+		for pb.Next() {
+			keyInt = i % steps
+			key = disp[keyInt]
+			if _, found = m[key]; found {
+				continue
+			}
+
+			l, found = obs.GetOrCreate(keyInt)
+			if !found {
+				time.AfterFunc(time.Millisecond, func() {
+					//obs.Delete(keyInt)
 					l.Broadcast(312)
 				})
 			}
