@@ -95,7 +95,7 @@ func BenchmarkResend(b *testing.B) {
 				l, f := obs.GetOrCreate(k)
 				if !f {
 					time.AfterFunc(time.Millisecond, func() {
-						//obs.Delete(key)
+						obs.Delete(key)
 						l.Broadcast(312)
 					})
 				}
@@ -127,7 +127,7 @@ func BenchmarkResendString(b *testing.B) {
 				l, f := obs.GetOrCreate(k)
 				if !f {
 					time.AfterFunc(time.Millisecond, func() {
-						//obs.Delete(key)
+						obs.Delete(key)
 						l.Broadcast(312)
 					})
 				}
@@ -160,7 +160,7 @@ func BenchmarkResendInt(b *testing.B) {
 				l, f := obs.GetOrCreate(k)
 				if !f {
 					time.AfterFunc(time.Millisecond, func() {
-						//obs.Delete(key)
+						obs.Delete(k)
 						l.Broadcast(312)
 					})
 				}
@@ -192,7 +192,7 @@ func BenchmarkOnce(b *testing.B) {
 				l, f := obs.GetOrCreate(k)
 				if !f {
 					time.AfterFunc(time.Millisecond, func() {
-						//obs.Delete(key)
+						obs.Delete(key)
 						l.Broadcast(312)
 					})
 				}
@@ -224,7 +224,7 @@ func BenchmarkOnceString(b *testing.B) {
 				l, f := obs.GetOrCreate(k)
 				if !f {
 					time.AfterFunc(time.Millisecond, func() {
-						//obs.Delete(key)
+						obs.Delete(key)
 						l.Broadcast(312)
 					})
 				}
@@ -257,7 +257,7 @@ func BenchmarkOnceInt(b *testing.B) {
 				l, f := obs.GetOrCreate(k)
 				if !f {
 					time.AfterFunc(time.Millisecond, func() {
-						//obs.Delete(key)
+						obs.Delete(k)
 						l.Broadcast(312)
 					})
 				}
@@ -296,7 +296,7 @@ func BenchmarkThreadsResend(b *testing.B) {
 			l, found = obs.GetOrCreate(key)
 			if !found {
 				time.AfterFunc(time.Millisecond, func() {
-					//obs.Delete(key)
+					obs.Delete(key)
 					l.Broadcast(312)
 				})
 			}
@@ -336,7 +336,7 @@ func BenchmarkThreadsResendString(b *testing.B) {
 			l, found = obs.GetOrCreate(key)
 			if !found {
 				time.AfterFunc(time.Millisecond, func() {
-					//obs.Delete(key)
+					obs.Delete(key)
 					l.Broadcast(312)
 				})
 			}
@@ -378,7 +378,7 @@ func BenchmarkThreadsResendInt(b *testing.B) {
 			l, found = obs.GetOrCreate(keyInt)
 			if !found {
 				time.AfterFunc(time.Millisecond, func() {
-					//obs.Delete(keyInt)
+					obs.Delete(keyInt)
 					l.Broadcast(312)
 				})
 			}
@@ -418,7 +418,7 @@ func BenchmarkThreadsOnce(b *testing.B) {
 			l, found = obs.GetOrCreate(key)
 			if !found {
 				time.AfterFunc(time.Millisecond, func() {
-					//obs.Delete(key)
+					obs.Delete(key)
 					l.Broadcast(312)
 				})
 			}
@@ -458,7 +458,7 @@ func BenchmarkThreadsOnceString(b *testing.B) {
 			l, found = obs.GetOrCreate(key)
 			if !found {
 				time.AfterFunc(time.Millisecond, func() {
-					//obs.Delete(key)
+					obs.Delete(key)
 					l.Broadcast(312)
 				})
 			}
@@ -500,7 +500,7 @@ func BenchmarkThreadsOnceInt(b *testing.B) {
 			l, found = obs.GetOrCreate(keyInt)
 			if !found {
 				time.AfterFunc(time.Millisecond, func() {
-					//obs.Delete(keyInt)
+					obs.Delete(keyInt)
 					l.Broadcast(312)
 				})
 			}

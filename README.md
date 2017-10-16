@@ -178,3 +178,14 @@ func main() {
 	fmt.Println("Duration", time.Since(start).String())
 }
 ```
+
+Benchmarks
+----------
+```
+BenchmarkThreadsResend-4             200000000             9.65 ns/op     207.20 MB/s           0 B/op           0 allocs/op
+BenchmarkThreadsResendString-4       200000000             9.30 ns/op     215.14 MB/s           0 B/op           0 allocs/op
+BenchmarkThreadsResendInt-4          200000000             9.14 ns/op     218.80 MB/s           0 B/op           0 allocs/op
+BenchmarkThreadsOnce-4               200000000             9.96 ns/op     200.79 MB/s           0 B/op           0 allocs/op
+BenchmarkThreadsOnceString-4         200000000             9.78 ns/op     204.54 MB/s           0 B/op           0 allocs/op
+BenchmarkThreadsOnceInt-4            200000000             9.21 ns/op     217.20 MB/s           0 B/op           0 allocs/op
+```
