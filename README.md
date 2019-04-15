@@ -3,6 +3,7 @@ Concurent Sub/Unsub pattern for Golang. Can be used as an alternative to channel
 
 [![Build Status](https://travis-ci.org/jenchik/listener.svg)](https://travis-ci.org/jenchik/listener)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jenchik/listener)](https://goreportcard.com/report/github.com/jenchik/listener)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjenchik%2Flistener.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjenchik%2Flistener?ref=badge_shield)
 
 Installation
 ------------
@@ -189,3 +190,7 @@ BenchmarkThreadsOnce-4               200000000             9.96 ns/op     200.79
 BenchmarkThreadsOnceString-4         200000000             9.78 ns/op     204.54 MB/s           0 B/op           0 allocs/op
 BenchmarkThreadsOnceInt-4            200000000             9.21 ns/op     217.20 MB/s           0 B/op           0 allocs/op
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjenchik%2Flistener.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjenchik%2Flistener?ref=badge_large)
